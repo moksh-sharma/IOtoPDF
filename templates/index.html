@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#09090e">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="author" content="Shakkar Daddy">
+    <meta name="description" content="Convert your Resume.io resume to a searchable PDF - by Shakkar Daddy.">
+    <meta property="og:title" content="Shakkar Daddy · Resume.io to PDF">
+    <meta property="og:description" content="Convert your Resume.io resume to a searchable PDF instantly.">
+    <meta property="og:image" content="/static/logo.png">
+    <link rel="icon" type="image/png" href="/static/favicon.png">
+    <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+    <title>Shakkar Daddy · Resume.io to PDF</title>
+
+    <style>
+        :root {
+            --bg: #09090e;
+            --surface: #111118;
+            --surface-elevated: #16161f;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-subtle: rgba(255, 255, 255, 0.05);
+            --text: #ececf1;
+            --text-secondary: #9898a8;
+            --text-tertiary: #5c5c6e;
+            --accent: #6d5ce7;
+            --accent-light: #8b7cf7;
+            --accent-muted: rgba(109, 92, 231, 0.12);
+            --error: #e85d6f;
+            --error-bg: rgba(232, 93, 111, 0.08);
+            --success: #3ecf8e;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --max-width: 1080px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100%;
+            min-height: 100dvh;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(600px circle at 15% 10%, rgba(109, 92, 231, 0.07), transparent),
+                radial-gradient(500px circle at 85% 90%, rgba(109, 92, 231, 0.05), transparent);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── Top bar ── */
+        .topbar {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 2rem;
+            border-bottom: 1px solid var(--border-subtle);
+            background: rgba(9, 9, 14, 0.8);
+            backdrop-filter: blur(12px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+        }
+
+        .brand-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: var(--surface-elevated);
+            border: 1px solid var(--border);
+        }
+
+        .logo {
+            display: block;
+            object-fit: cover;
+        }
+
+        .logo-sm {
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-md {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .logo-lg {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+        }
+
+        .brand-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--text);
+        }
+
+        .brand-tag {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            font-weight: 400;
+        }
+
+        /* ── Main layout ── */
+        .container {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem 2rem;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 400px);
+            gap: 4rem;
+            align-items: center;
+            width: 100%;
+            max-width: var(--max-width);
+        }
+
+        .br-mobile {
+            display: none;
+        }
+
+        /* ── Hero (left) ── */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+        }
+
+        .hero-logo {
+            margin-bottom: 0.25rem;
+        }
+
+        .eyebrow {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent-light);
+        }
+
+        .title {
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            font-weight: 700;
+            letter-spacing: -0.035em;
+            line-height: 1.15;
+            color: var(--text);
+        }
+
+        .subtitle {
+            font-size: 1.0625rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            max-width: 28rem;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.875rem;
+            padding-top: 0.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .feature-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--surface-elevated);
+            border: 1px solid var(--border);
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .feature-icon svg {
+            width: 15px;
+            height: 15px;
+            stroke: var(--text-secondary);
+        }
+
+        .feature-text strong {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.125rem;
+        }
+
+        .feature-text span {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            line-height: 1.45;
+        }
+
+        /* ── Form panel (right) ── */
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.4);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.875rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .panel-header-text {
+            flex: 1;
+        }
+
+        .panel-title {
+            font-size: 1.0625rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.375rem;
+        }
+
+        .panel-desc {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        .resume_form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .field-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .field-label {
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .char-count {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            font-variant-numeric: tabular-nums;
+            transition: color 0.2s;
+        }
+
+        .char-count.valid {
+            color: var(--success);
+        }
+
+        .resume {
+            width: 100%;
+            padding: 0.8125rem 0.875rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            background: var(--surface-elevated);
+            color: var(--text);
+            font-family: ui-monospace, "SF Mono", monospace;
+            font-size: 0.8125rem;
+            letter-spacing: 0.04em;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .resume::placeholder {
+            color: var(--text-tertiary);
+            letter-spacing: normal;
+            font-family: "Inter", sans-serif;
+        }
+
+        .resume:focus {
+            border-color: rgba(109, 92, 231, 0.5);
+            box-shadow: 0 0 0 3px rgba(109, 92, 231, 0.12);
+        }
+
+        .error {
+            display: none;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 0.75rem 0.875rem;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(232, 93, 111, 0.2);
+            background: var(--error-bg);
+            color: var(--error);
+            font-size: 0.8125rem;
+            line-height: 1.4;
+        }
+
+        .error svg {
+            width: 15px;
+            height: 15px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .error-border {
+            border-color: var(--error) !important;
+            box-shadow: 0 0 0 3px rgba(232, 93, 111, 0.1) !important;
+        }
+
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            height: 44px;
+            margin-top: 0.25rem;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.875rem;
+            font-weight: 600;
+            font-family: "Inter", sans-serif;
+            color: #fff;
+            cursor: pointer;
+            background: var(--accent);
+            transition: background 0.15s, transform 0.1s;
+        }
+
+        .btn:hover {
+            background: var(--accent-light);
+        }
+
+        .btn:active {
+            transform: scale(0.99);
+        }
+
+        .btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        #loader {
+            display: none;
+        }
+
+        #submit-text {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .hint {
+            margin-top: 1.25rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--border-subtle);
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            line-height: 1.55;
+        }
+
+        .hint code {
+            font-family: ui-monospace, monospace;
+            font-size: 0.6875rem;
+            padding: 0.1rem 0.3rem;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+        }
+
+        /* ── Footer ── */
+        .footer {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1.25rem 2rem;
+            border-top: 1px solid var(--border-subtle);
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+
+        .footer .logo-md {
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+            border: none;
+            opacity: 0.7;
+        }
+
+        .footer strong {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* ── Animations ── */
+        .spinner_V8m1 {
+            transform-origin: center;
+            animation: spinner_zKoa 2s linear infinite;
+        }
+
+        .spinner_V8m1 circle {
+            stroke-linecap: round;
+            animation: spinner_YpZS 1.5s ease-in-out infinite;
+        }
+
+        @keyframes spinner_zKoa {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spinner_YpZS {
+            0% {
+                stroke-dasharray: 0 150;
+                stroke-dashoffset: 0;
+            }
+
+            47.5% {
+                stroke-dasharray: 42 150;
+                stroke-dashoffset: -16;
+            }
+
+            95%,
+            100% {
+                stroke-dasharray: 42 150;
+                stroke-dashoffset: -59;
+            }
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-4px);
+            }
+
+            75% {
+                transform: translateX(4px);
+            }
+        }
+
+        .shake {
+            animation: shake 0.3s ease;
+        }
+
+        /* ── Responsive ── */
+
+        /* Tablet */
+        @media (max-width: 960px) {
+            .layout {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                max-width: 520px;
+            }
+
+            .container {
+                padding: 2rem 1.5rem 1.5rem;
+                align-items: flex-start;
+            }
+
+            .hero {
+                text-align: center;
+                align-items: center;
+                gap: 1.25rem;
+            }
+
+            .hero-logo {
+                display: none;
+            }
+
+            .subtitle {
+                max-width: none;
+                font-size: 1rem;
+            }
+
+            .feature-list {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .feature-item {
+                text-align: left;
+            }
+
+            .panel {
+                width: 100%;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 640px) {
+            .topbar {
+                padding: 0.875rem 1rem;
+                padding-top: max(0.875rem, env(safe-area-inset-top));
+            }
+
+            .brand-icon {
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+            }
+
+            .brand-name {
+                font-size: 0.8125rem;
+            }
+
+            .brand-tag {
+                font-size: 0.6875rem;
+            }
+
+            .container {
+                padding: 1.25rem 1rem 1rem;
+                padding-left: max(1rem, env(safe-area-inset-left));
+                padding-right: max(1rem, env(safe-area-inset-right));
+            }
+
+            .layout {
+                gap: 1.5rem;
+                max-width: 100%;
+            }
+
+            /* Form first on mobile - primary action above the fold */
+            .panel {
+                order: -1;
+                padding: 1.25rem;
+                border-radius: 14px;
+            }
+
+            .hero {
+                gap: 1rem;
+            }
+
+            .title {
+                font-size: 1.75rem;
+            }
+
+            .br-mobile {
+                display: inline;
+            }
+
+            .subtitle {
+                font-size: 0.9375rem;
+                line-height: 1.55;
+            }
+
+            .feature-list {
+                gap: 0.75rem;
+                padding-top: 0.25rem;
+            }
+
+            .feature-icon {
+                width: 28px;
+                height: 28px;
+            }
+
+            .feature-text strong {
+                font-size: 0.8125rem;
+            }
+
+            .feature-text span {
+                font-size: 0.75rem;
+            }
+
+            .panel-header {
+                margin-bottom: 1.25rem;
+                gap: 0.75rem;
+            }
+
+            .panel-header .logo-md {
+                width: 32px;
+                height: 32px;
+            }
+
+            .panel-title {
+                font-size: 1rem;
+            }
+
+            .panel-desc {
+                font-size: 0.75rem;
+            }
+
+            .resume {
+                font-size: 16px;
+                /* prevents iOS zoom on focus */
+                padding: 0.875rem;
+                letter-spacing: 0.02em;
+            }
+
+            .btn {
+                height: 48px;
+                font-size: 0.9375rem;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .hint {
+                font-size: 0.6875rem;
+                margin-top: 1rem;
+                padding-top: 1rem;
+                word-break: break-word;
+            }
+
+            .footer {
+                padding: 1rem;
+                padding-bottom: max(1rem, env(safe-area-inset-bottom));
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Small phones */
+        @media (max-width: 380px) {
+            .brand-text {
+                min-width: 0;
+            }
+
+            .brand-tag {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 140px;
+            }
+
+            .title {
+                font-size: 1.5rem;
+            }
+
+            .panel {
+                padding: 1rem;
+            }
+
+            .field-row {
+                flex-wrap: wrap;
+                gap: 0.25rem;
+            }
+        }
+
+        /* Landscape phones */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .container {
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+            }
+
+            .hero-logo {
+                display: none;
+            }
+
+            .feature-list {
+                display: none;
+            }
+
+            .layout {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">
+                <img class="logo logo-sm" src="/static/logo.png" alt="Shakkar Daddy logo" width="36" height="36">
+            </div>
+            <div class="brand-text">
+                <div class="brand-name">Shakkar Daddy</div>
+                <div class="brand-tag">Resume.io to PDF</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="layout">
+            <section class="hero">
+                <img class="logo logo-lg hero-logo" src="/static/logo.png" alt="Shakkar Daddy logo" width="56"
+                    height="56">
+                <p class="eyebrow">PDF Converter</p>
+                <h1 class="title">Turn your Resume.io<span class="br-mobile"><br></span> resume into PDF</h1>
+                <p class="subtitle">
+                    Enter your rendering token to download a clean, searchable PDF - with OCR text extraction built in.
+                </p>
+
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
+                                <polyline points="13 2 13 9 20 9" />
+                            </svg>
+                        </div>
+                        <div class="feature-text">
+                            <strong>High-quality PDF export</strong>
+                            <span>Downloads your resume page as a crisp PDF file.</span>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8" />
+                                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                            </svg>
+                        </div>
+                        <div class="feature-text">
+                            <strong>OCR text layer</strong>
+                            <span>Extracts searchable text so your PDF is ATS-friendly.</span>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                            </svg>
+                        </div>
+                        <div class="feature-text">
+                            <strong>Instant download</strong>
+                            <span>No sign-up required - paste your token and go.</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <img class="logo logo-md" src="/static/logo.png" alt="" aria-hidden="true" width="40" height="40">
+                    <div class="panel-header-text">
+                        <h2 class="panel-title">Download your resume</h2>
+                        <p class="panel-desc">Paste the 24-character rendering token from your Resume.io account.</p>
+                    </div>
+                </div>
+
+                <form method="post" class="resume_form" id="downloadForm">
+                    <div class="field-group">
+                        <div class="field-row">
+                            <label class="field-label" for="rendering_token">Rendering Token</label>
+                            <span class="char-count" id="charCount">0 / 24</span>
+                        </div>
+                        <input type="text" class="resume" id="rendering_token" name="rendering_token"
+                            placeholder="Paste 24-char token" aria-label="Rendering token" maxlength="24"
+                            inputmode="text" autocapitalize="off" autocorrect="off" autocomplete="off"
+                            spellcheck="false">
+                    </div>
+
+                    <span class="error" id="errorMessage">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                        Token must be exactly 24 alphanumeric characters.
+                    </span>
+
+                    <button id="submit-btn" class="btn" type="submit">
+                        <span id="submit-text">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            Download PDF
+                        </span>
+                        <svg id="loader" width="20" height="20" stroke="#fff" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <g class="spinner_V8m1">
+                                <circle cx="12" cy="12" r="9.5" fill="none" stroke-width="3"></circle>
+                            </g>
+                        </svg>
+                    </button>
+                </form>
+
+                <p class="hint">
+                    Find your token at resume.io → DevTools → Network → look for <code>renderingToken</code> in the API
+                    response.
+                </p>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <img class="logo logo-md" src="/static/logo.png" alt="" aria-hidden="true" width="20" height="20">
+        Built by <strong>Shakkar Daddy</strong>
+    </footer>
+
+    <script>
+        window.addEventListener('pageshow', function () {
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('submit-text').style.display = 'flex';
+        });
+
+        const downloadForm = document.getElementById("downloadForm");
+        const errorMessage = document.getElementById('errorMessage');
+        const inputField = document.getElementById('rendering_token');
+        const charCount = document.getElementById('charCount');
+        const submitText = document.getElementById('submit-text');
+
+        inputField.addEventListener('input', function () {
+            const len = this.value.length;
+            charCount.textContent = len + ' / 24';
+            charCount.classList.toggle('valid', len === 24);
+            if (len === 24) {
+                errorMessage.style.display = 'none';
+                inputField.classList.remove('error-border', 'shake');
+            }
+        });
+
+        downloadForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const rendering_token = new FormData(downloadForm).get('rendering_token').toString();
+            const regex = /^[a-zA-Z0-9]{24}$/;
+
+            if (!regex.test(rendering_token)) {
+                errorMessage.style.display = 'flex';
+                inputField.classList.add('error-border');
+                inputField.classList.remove('shake');
+                setTimeout(function () {
+                    inputField.classList.add('shake');
+                }, 50);
+                return;
+            }
+
+            errorMessage.style.display = 'none';
+            inputField.classList.remove('error-border', 'shake');
+
+            downloadForm.action = '/download/' + rendering_token;
+            submitText.style.display = 'none';
+            document.getElementById('loader').style.display = 'block';
+            this.submit();
+        });
+    </script>
+</body>
+
+</html>
