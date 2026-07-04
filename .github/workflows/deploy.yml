@@ -1,7 +1,9 @@
 name: Fly Deploy - Shakkar Daddy
+
 on:
   push:
-    branches: [ main ]
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -9,7 +11,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only
+
+      - name: Deploy to Fly.io
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        run: |
+          if [ -z "$FLY_API_TOKEN" ]; then
+            echo "::notice::Skipping Fly deploy — add FLY_API_TOKEN to repository secrets to enable auto-deploy."
+            echo "See: https://fly.io/docs/reference/secrets/#manage-secrets-in-github-actions"
+            exit 0
+          fi
+          flyctl deploy --remote-only
