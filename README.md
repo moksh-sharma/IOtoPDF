@@ -39,6 +39,47 @@ docker run -p 8000:8000 shakkar-resumeio-pdf
 
 Open your browser and access http://localhost:8000
 
+### Deploy on Oracle Cloud (free forever)
+
+**1. Create a free VM**
+
+- Sign up at [cloud.oracle.com](https://cloud.oracle.com)
+- **Compute → Instances → Create instance**
+- Image: **Ubuntu 22.04** (or 24.04)
+- Shape: **Ampere A1 Flex** (Always Free) - 1 OCPU, 6 GB RAM is enough
+- Add your **SSH public key**
+- Create
+
+**2. Open firewall ports (Oracle Console)**
+
+- **Networking → Virtual Cloud Networks** → your VCN → **Security List**
+- Add **Ingress** rules:
+  - TCP port **22** (SSH)
+  - TCP port **80** (HTTP)
+  - TCP port **443** (HTTPS, optional for later)
+
+**3. SSH into the VM and deploy**
+
+```bash
+ssh ubuntu@YOUR_PUBLIC_IP
+
+git clone https://github.com/moksh-sharma/IOtoPDF.git
+cd IOtoPDF
+bash scripts/oracle-vm-setup.sh
+```
+
+If you were added to the `docker` group, log out and back in first, or use `sudo docker compose` commands.
+
+**4. Visit your site**
+
+Open `http://YOUR_PUBLIC_IP` in a browser - it is public for anyone to use.
+
+**Update later:**
+
+```bash
+cd ~/IOtoPDF && git pull && sudo docker compose up -d --build
+```
+
 ### Disclaimer
 
 Please be advised that this application is designed for preview purposes only.

@@ -2,6 +2,7 @@
 
 __author__ = "Shakkar Daddy"
 
+import os
 from pathlib import Path
 
 import uvicorn
@@ -18,5 +19,5 @@ app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 
 if __name__ == "__main__":
-    """Instantiate the application webserver"""
-    uvicorn.run("main:app", host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", "8000"))
+    uvicorn.run("app.main:app", host="0.0.0.0", port=port)
