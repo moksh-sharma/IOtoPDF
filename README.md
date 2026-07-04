@@ -39,46 +39,33 @@ docker run -p 8000:8000 shakkar-resumeio-pdf
 
 Open your browser and access http://localhost:8000
 
-### Deploy on Oracle Cloud (free forever)
+### Deploy on Render (free)
 
-**1. Create a free VM**
+**1. Sign up**
 
-- Sign up at [cloud.oracle.com](https://cloud.oracle.com)
-- **Compute → Instances → Create instance**
-- Image: **Ubuntu 22.04** (or 24.04)
-- Shape: **Ampere A1 Flex** (Always Free) - 1 OCPU, 6 GB RAM is enough
-- Add your **SSH public key**
-- Create
+Go to [render.com](https://render.com) and sign up with GitHub.
 
-**2. Open firewall ports (Oracle Console)**
+**2. Create a Web Service**
 
-- **Networking → Virtual Cloud Networks** → your VCN → **Security List**
-- Add **Ingress** rules:
-  - TCP port **22** (SSH)
-  - TCP port **80** (HTTP)
-  - TCP port **443** (HTTPS, optional for later)
+- Click **New +** → **Blueprint** (uses `render.yaml` from this repo), **or** **Web Service** manually:
+  - Connect repo: `moksh-sharma/IOtoPDF`
+  - **Environment:** Docker
+  - **Instance type:** Free
+  - **Port:** `8000`
 
-**3. SSH into the VM and deploy**
+**3. Deploy**
 
-```bash
-ssh ubuntu@YOUR_PUBLIC_IP
+Render builds from the `Dockerfile` and gives you a public URL like:
 
-git clone https://github.com/moksh-sharma/IOtoPDF.git
-cd IOtoPDF
-bash scripts/oracle-vm-setup.sh
+```
+https://iotopdf.onrender.com
 ```
 
-If you were added to the `docker` group, log out and back in first, or use `sudo docker compose` commands.
+**4. Auto-deploy**
 
-**4. Visit your site**
+Every push to `main` redeploys automatically.
 
-Open `http://YOUR_PUBLIC_IP` in a browser - it is public for anyone to use.
-
-**Update later:**
-
-```bash
-cd ~/IOtoPDF && git pull && sudo docker compose up -d --build
-```
+> **Note:** Free tier sleeps after ~15 min idle. First visit after sleep may take 30-60 seconds to wake up.
 
 ### Disclaimer
 

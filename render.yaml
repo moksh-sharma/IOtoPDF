@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: iotopdf
+    runtime: docker
+    plan: free
+    region: singapore
+    repo: https://github.com/moksh-sharma/IOtoPDF
+    branch: main
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /
