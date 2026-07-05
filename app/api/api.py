@@ -8,7 +8,9 @@ from fastapi import APIRouter, Path, Query, Request, Response
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
+from app.schemas.ats import ATSScoreReport
 from app.schemas.resumeio import Extension
+from app.services.ats import analyze_resume
 from app.services.resumeio import ResumeioDownloader
 
 router = APIRouter()
@@ -48,6 +50,38 @@ def download_resume(
         media_type="application/pdf",
         headers={"Content-Disposition": f'inline; filename="{rendering_token}.pdf"'},
     )
+
+
+@router.post("/analyze/{rendering_token}", response_model=ATSScoreReport)
+def analyze_resume_ats(
+    rendering_token: Annotated[str, Path(min_length=24, max_length=24, pattern="^[a-zA-Z0-9]{24}$")],
+    image_size: Annotated[int, Query(gt=0, le=2000)] = 2000,
+    extension: Annotated[Extension, Query()] = Extension.jpeg,
+) -> ATSScoreReport:
+    """
+    Fetch a resume from resume.io and return an ATS compatibility score.
+
+    Parameters
+    ----------
+    rendering_token : str
+        Rendering Token of the resume to analyze.
+    image_size : int, optional
+        Size of the images to download, by default 2000.
+    extension : Extension, optional
+        Image extension to download, by default "jpeg".
+
+    Returns
+    -------
+    ATSScoreReport
+        ATS score breakdown and improvement tips.
+    """
+    resumeio = ResumeioDownloader(
+        rendering_token=rendering_token,
+        image_size=image_size,
+        extension=extension,
+    )
+    text = resumeio.extract_text()
+    return analyze_resume(text)
 
 
 @router.get("/", response_class=HTMLResponse, include_in_schema=False)

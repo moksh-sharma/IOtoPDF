@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 import pytesseract
 import requests
 from fastapi import HTTPException
-from PIL import Image
+from PIL import Image, ImageOps
 
 from app.schemas.resumeio import Extension
 
@@ -45,6 +45,22 @@ class ResumeioDownloader:
     def __post_init__(self) -> None:
         """Set the cache date to the current time."""
         self.cache_date = datetime.now(timezone.utc).isoformat()[:-10] + "Z"
+
+    def extract_text(self) -> str:
+        """
+        Extract plain text from the resume image via OCR.
+
+        Returns
+        -------
+        str
+            OCR text from the resume.
+        """
+        image = self.__download_image()
+        img = ImageOps.autocontrast(Image.open(image).convert("L"), cutoff=1)
+        return pytesseract.image_to_string(
+            img,
+            config="--oem 3 --psm 6 -c preserve_interword_spaces=1",
+        )
 
     def generate_pdf(self) -> bytes:
         """

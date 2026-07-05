@@ -77,7 +77,7 @@
             z-index: 0;
         }
 
-        /* ── Top bar ── */
+        /* -- Top bar -- */
         .topbar {
             position: relative;
             z-index: 10;
@@ -147,7 +147,7 @@
             font-weight: 500;
         }
 
-        /* ── Main layout ── */
+        /* -- Main layout -- */
         .container {
             position: relative;
             z-index: 1;
@@ -161,6 +161,11 @@
         .layout {
             width: 100%;
             max-width: 520px;
+            transition: max-width 0.35s ease;
+        }
+
+        .layout.has-ats {
+            max-width: var(--max-width);
         }
 
         .workspace {
@@ -171,6 +176,35 @@
             box-shadow:
                 0 0 0 1px rgba(255, 255, 255, 0.03) inset,
                 0 32px 64px -24px rgba(0, 0, 0, 0.55);
+        }
+
+        .workspace-columns {
+            display: block;
+        }
+
+        .layout.has-ats .workspace-columns {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        }
+
+        .workspace-column--form {
+            min-width: 0;
+        }
+
+        .workspace-column--ats {
+            display: none;
+            min-width: 0;
+        }
+
+        .layout.has-ats .workspace-column--ats {
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .container.has-ats {
+            align-items: flex-start;
         }
 
         .workspace-header {
@@ -302,7 +336,7 @@
             display: none;
         }
 
-        /* ── Form ── */
+        /* -- Form -- */
         .panel-header {
             margin-bottom: 1.25rem;
         }
@@ -470,7 +504,340 @@
             color: var(--text-secondary);
         }
 
-        /* ── Footer ── */
+        /* -- ATS Results -- */
+        .workspace-column--ats {
+            padding: 1.75rem 1.5rem 2rem;
+        }
+
+        .ats-panel {
+            display: none;
+            flex: 1;
+            padding: 0;
+            border-radius: 0;
+            background: transparent;
+            border: none;
+            animation: fadeIn 0.35s ease;
+        }
+
+        .ats-panel.visible {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .ats-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .ats-score-ring {
+            position: relative;
+            width: 72px;
+            height: 72px;
+            flex-shrink: 0;
+        }
+
+        .ats-score-ring svg {
+            width: 72px;
+            height: 72px;
+            transform: rotate(-90deg);
+        }
+
+        .ats-score-ring circle {
+            fill: none;
+            stroke-width: 6;
+        }
+
+        .ats-score-ring .ring-bg {
+            stroke: rgba(255, 255, 255, 0.08);
+        }
+
+        .ats-score-ring .ring-fill {
+            stroke: var(--accent-light);
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.6s ease;
+        }
+
+        .ats-score-value {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .ats-score-value strong {
+            font-family: "Plus Jakarta Sans", sans-serif;
+            font-size: 1.375rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .ats-score-value span {
+            font-size: 0.625rem;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        .ats-summary h3 {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.25rem;
+        }
+
+        .ats-summary p {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            line-height: 1.45;
+        }
+
+        .ats-grade {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 1.75rem;
+            padding: 0.15rem 0.45rem;
+            margin-left: 0.35rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            vertical-align: middle;
+        }
+
+        .ats-grade-a {
+            background: rgba(62, 207, 142, 0.15);
+            color: var(--success);
+        }
+
+        .ats-grade-b {
+            background: rgba(109, 92, 231, 0.15);
+            color: var(--accent-light);
+        }
+
+        .ats-grade-c {
+            background: rgba(255, 193, 7, 0.12);
+            color: #f5c842;
+        }
+
+        .ats-grade-d,
+        .ats-grade-f {
+            background: var(--error-bg);
+            color: var(--error);
+        }
+
+        .ats-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.6875rem;
+            color: var(--text-tertiary);
+        }
+
+        .ats-meta span {
+            padding: 0.2rem 0.5rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .ats-categories {
+            display: flex;
+            flex-direction: column;
+            gap: 0.625rem;
+            margin-bottom: 1rem;
+        }
+
+        .ats-category {
+            padding: 0.75rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .ats-category-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .ats-category-name {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .ats-category-score {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .ats-bar {
+            height: 4px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .ats-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            transition: width 0.5s ease;
+        }
+
+        .ats-feedback {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .ats-feedback li {
+            font-size: 0.6875rem;
+            color: var(--text-tertiary);
+            line-height: 1.4;
+            padding-left: 0.75rem;
+            position: relative;
+        }
+
+        .ats-feedback li::before {
+            content: "·";
+            position: absolute;
+            left: 0;
+            color: var(--text-tertiary);
+        }
+
+        .ats-tips {
+            padding-top: 0.875rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .ats-tips-title {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .ats-tips ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .ats-tips li {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            line-height: 1.45;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .ats-tips li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent-light);
+            font-size: 0.6875rem;
+        }
+
+        .ats-loading {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            min-height: 280px;
+            padding: 1.5rem;
+            border-radius: 0;
+            background: transparent;
+            border: none;
+            font-size: 0.8125rem;
+            color: var(--accent-light);
+            text-align: center;
+        }
+
+        .ats-loading.visible {
+            display: flex;
+        }
+
+        .ats-loading svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .ats-error {
+            display: none;
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+            margin-top: 0;
+            padding: 1.25rem;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(232, 93, 111, 0.2);
+            background: var(--error-bg);
+            color: var(--error);
+            font-size: 0.8125rem;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .ats-error.visible {
+            display: flex;
+        }
+
+        .ats-column-header {
+            display: none;
+            margin-bottom: 1.25rem;
+        }
+
+        .layout.has-ats .ats-column-header {
+            display: block;
+        }
+
+        .ats-column-title {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .ats-column-desc {
+            font-size: 0.8125rem;
+            color: var(--text-tertiary);
+        }
+
+        /* -- Footer -- */
         .footer {
             position: relative;
             z-index: 1;
@@ -497,7 +864,7 @@
             font-weight: 500;
         }
 
-        /* ── Animations ── */
+        /* -- Animations -- */
         .spinner_V8m1 {
             transform-origin: center;
             animation: spinner_zKoa 2s linear infinite;
@@ -552,7 +919,27 @@
             animation: shake 0.3s ease;
         }
 
-        /* ── Responsive ── */
+        /* -- Responsive -- */
+
+        @media (max-width: 900px) {
+            .layout.has-ats .workspace-columns {
+                grid-template-columns: 1fr;
+            }
+
+            .layout.has-ats .workspace-column--ats {
+                border-left: none;
+                border-top: 1px solid var(--border);
+            }
+
+            .workspace-column--ats {
+                padding: 1.25rem;
+            }
+
+            .ats-loading,
+            .ats-error {
+                min-height: 200px;
+            }
+        }
 
         @media (max-width: 640px) {
             .topbar {
@@ -690,70 +1077,119 @@
     <main class="container">
         <div class="layout">
             <div class="workspace">
-                <div class="workspace-header">
-                    <div class="workspace-logo">
-                        <img src="/static/logo.png" alt="IOtoPDF logo" width="56" height="56">
-                    </div>
-                    <div class="workspace-badge">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
-                            <polyline points="13 2 13 9 20 9" />
-                        </svg>
-                        Free converter
-                    </div>
-                    <h1 class="title">
-                        <span class="title-highlight">Resume.io</span> to<br class="br-mobile"> PDF
-                    </h1>
-                </div>
-
-                <div class="workspace-divider"></div>
-
-                <div class="workspace-body">
-                    <div class="panel-header">
-                        <h2 class="panel-title">Get started</h2>
-                        <p class="panel-desc">Enter your 24-character token from Resume.io</p>
-                    </div>
-
-                    <form method="post" class="resume_form" id="downloadForm" target="_blank">
-                        <div class="field-group">
-                            <div class="field-row">
-                                <label class="field-label" for="rendering_token">Rendering Token</label>
-                                <span class="char-count" id="charCount">0 / 24</span>
+                <div class="workspace-columns">
+                    <div class="workspace-column workspace-column--form">
+                        <div class="workspace-header">
+                            <div class="workspace-logo">
+                                <img src="/static/logo.png" alt="IOtoPDF logo" width="56" height="56">
                             </div>
-                            <input type="text" class="resume" id="rendering_token" name="rendering_token"
-                                placeholder="Paste 24-char token" aria-label="Rendering token" maxlength="24"
-                                inputmode="text" autocapitalize="off" autocorrect="off" autocomplete="off"
-                                spellcheck="false">
+                            <div class="workspace-badge">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
+                                    <polyline points="13 2 13 9 20 9" />
+                                </svg>
+                                Free converter
+                            </div>
+                            <h1 class="title">
+                                <span class="title-highlight">Resume.io</span> to<br class="br-mobile"> PDF
+                            </h1>
                         </div>
 
-                        <span class="error" id="errorMessage">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10" />
-                                <line x1="12" y1="8" x2="12" y2="12" />
-                                <line x1="12" y1="16" x2="12.01" y2="16" />
-                            </svg>
-                            <span id="errorText">Token must be exactly 24 alphanumeric characters.</span>
-                        </span>
+                        <div class="workspace-divider"></div>
 
-                        <button id="submit-btn" class="btn" type="submit">
-                            <span id="submit-text">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                    <polyline points="7 10 12 15 17 10" />
-                                    <line x1="12" y1="15" x2="12" y2="3" />
-                                </svg>
-                                Download
-                            </span>
-                            <svg id="loader" width="20" height="20" stroke="#fff" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
+                        <div class="workspace-body">
+                            <div class="panel-header">
+                                <h2 class="panel-title">Get started</h2>
+                                <p class="panel-desc">Enter your 24-character token from Resume.io</p>
+                            </div>
+
+                            <form method="post" class="resume_form" id="downloadForm" target="_blank">
+                                <div class="field-group">
+                                    <div class="field-row">
+                                        <label class="field-label" for="rendering_token">Rendering Token</label>
+                                        <span class="char-count" id="charCount">0 / 24</span>
+                                    </div>
+                                    <input type="text" class="resume" id="rendering_token" name="rendering_token"
+                                        placeholder="Paste 24-char token" aria-label="Rendering token" maxlength="24"
+                                        inputmode="text" autocapitalize="off" autocorrect="off" autocomplete="off"
+                                        spellcheck="false">
+                                </div>
+
+                                <span class="error" id="errorMessage">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <line x1="12" y1="8" x2="12" y2="12" />
+                                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                                    </svg>
+                                    <span id="errorText">Token must be exactly 24 alphanumeric characters.</span>
+                                </span>
+
+                                <button id="submit-btn" class="btn" type="submit">
+                                    <span id="submit-text">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                            <polyline points="7 10 12 15 17 10" />
+                                            <line x1="12" y1="15" x2="12" y2="3" />
+                                        </svg>
+                                        Download & Check ATS
+                                    </span>
+                                    <svg id="loader" width="20" height="20" stroke="#fff" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <g class="spinner_V8m1">
+                                            <circle cx="12" cy="12" r="9.5" fill="none" stroke-width="3"></circle>
+                                        </g>
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="workspace-column workspace-column--ats">
+                        <div class="ats-column-header">
+                            <h2 class="ats-column-title">ATS Analysis</h2>
+                            <p class="ats-column-desc">Compatibility score and improvement tips</p>
+                        </div>
+
+                        <div class="ats-loading" id="atsLoading">
+                            <svg stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <g class="spinner_V8m1">
                                     <circle cx="12" cy="12" r="9.5" fill="none" stroke-width="3"></circle>
                                 </g>
                             </svg>
-                        </button>
-                    </form>
+                            Analyzing ATS compatibility…
+                        </div>
+
+                        <div class="ats-error" id="atsError"></div>
+
+                        <div class="ats-panel" id="atsPanel" aria-live="polite">
+                            <div class="ats-header">
+                                <div class="ats-score-ring">
+                                    <svg viewBox="0 0 72 72">
+                                        <circle class="ring-bg" cx="36" cy="36" r="30"></circle>
+                                        <circle class="ring-fill" id="atsRingFill" cx="36" cy="36" r="30"
+                                            stroke-dasharray="188.5" stroke-dashoffset="188.5"></circle>
+                                    </svg>
+                                    <div class="ats-score-value">
+                                        <strong id="atsScoreValue">0</strong>
+                                        <span>/ 100</span>
+                                    </div>
+                                </div>
+                                <div class="ats-summary">
+                                    <h3>ATS Score <span class="ats-grade" id="atsGrade">-</span></h3>
+                                    <p id="atsSummaryText">Your resume compatibility with applicant tracking systems.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="ats-meta" id="atsMeta"></div>
+                            <div class="ats-categories" id="atsCategories"></div>
+                            <div class="ats-tips" id="atsTips" style="display: none;">
+                                <div class="ats-tips-title">Quick tips</div>
+                                <ul id="atsTipsList"></ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="workspace-features">
@@ -778,10 +1214,11 @@
                     <div class="feature-chip">
                         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round">
-                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
                         </svg>
-                        <strong>Instant</strong>
-                        <span>No sign-up</span>
+                        <strong>ATS score</strong>
+                        <span>Instant check</span>
                     </div>
                 </div>
             </div>
@@ -802,6 +1239,104 @@
         const submitText = document.getElementById('submit-text');
         const submitBtn = document.getElementById('submit-btn');
         const loader = document.getElementById('loader');
+        const layout = document.querySelector('.layout');
+        const container = document.querySelector('.container');
+        const atsLoading = document.getElementById('atsLoading');
+        const atsError = document.getElementById('atsError');
+        const atsPanel = document.getElementById('atsPanel');
+        const atsScoreValue = document.getElementById('atsScoreValue');
+        const atsGrade = document.getElementById('atsGrade');
+        const atsSummaryText = document.getElementById('atsSummaryText');
+        const atsRingFill = document.getElementById('atsRingFill');
+        const atsMeta = document.getElementById('atsMeta');
+        const atsCategories = document.getElementById('atsCategories');
+        const atsTips = document.getElementById('atsTips');
+        const atsTipsList = document.getElementById('atsTipsList');
+        const RING_CIRCUMFERENCE = 188.5;
+
+        function setSplitLayout(active) {
+            layout.classList.toggle('has-ats', active);
+            container.classList.toggle('has-ats', active);
+        }
+
+        function resetAtsState() {
+            atsLoading.classList.remove('visible');
+            atsError.classList.remove('visible');
+            atsPanel.classList.remove('visible');
+            setSplitLayout(false);
+        }
+
+        function gradeClass(grade) {
+            return 'ats-grade ats-grade-' + grade.toLowerCase();
+        }
+
+        function renderAtsReport(report) {
+            atsScoreValue.textContent = report.score;
+            atsGrade.textContent = report.grade;
+            atsGrade.className = gradeClass(report.grade);
+            atsSummaryText.textContent = report.summary;
+
+            const offset = RING_CIRCUMFERENCE - (report.score / 100) * RING_CIRCUMFERENCE;
+            atsRingFill.style.strokeDashoffset = offset;
+
+            atsMeta.innerHTML = [
+                '<span>' + report.word_count + ' words detected</span>',
+                '<span>OCR quality: ' + report.ocr_quality + '</span>',
+            ].join('');
+
+            atsCategories.innerHTML = report.categories.map(function (category) {
+                const pct = Math.round((category.score / category.max_score) * 100);
+                const feedback = category.feedback.map(function (item) {
+                    return '<li>' + item + '</li>';
+                }).join('');
+
+                return (
+                    '<div class="ats-category">' +
+                    '<div class="ats-category-top">' +
+                    '<span class="ats-category-name">' + category.name + '</span>' +
+                    '<span class="ats-category-score">' + category.score + ' / ' + category.max_score + '</span>' +
+                    '</div>' +
+                    '<div class="ats-bar"><div class="ats-bar-fill" style="width:' + pct + '%"></div></div>' +
+                    '<ul class="ats-feedback">' + feedback + '</ul>' +
+                    '</div>'
+                );
+            }).join('');
+
+            if (report.tips && report.tips.length) {
+                atsTips.style.display = 'block';
+                atsTipsList.innerHTML = report.tips.map(function (tip) {
+                    return '<li>' + tip + '</li>';
+                }).join('');
+            } else {
+                atsTips.style.display = 'none';
+                atsTipsList.innerHTML = '';
+            }
+
+            setSplitLayout(true);
+            atsPanel.classList.add('visible');
+        }
+
+        async function fetchAtsScore(rendering_token) {
+            setSplitLayout(true);
+            atsLoading.classList.add('visible');
+            atsError.classList.remove('visible');
+            atsPanel.classList.remove('visible');
+
+            try {
+                const response = await fetch('/analyze/' + rendering_token, { method: 'POST' });
+                if (!response.ok) {
+                    const detail = await response.json().catch(function () { return {}; });
+                    throw new Error(detail.detail || 'Unable to analyze resume.');
+                }
+                const report = await response.json();
+                renderAtsReport(report);
+            } catch (err) {
+                atsError.textContent = err.message || 'ATS analysis failed. PDF download may still work.';
+                atsError.classList.add('visible');
+            } finally {
+                atsLoading.classList.remove('visible');
+            }
+        }
 
         function resetSubmitState() {
             submitText.style.display = 'flex';
@@ -849,6 +1384,7 @@
             loader.style.display = 'block';
             submitBtn.disabled = true;
 
+            fetchAtsScore(rendering_token);
             this.submit();
 
             setTimeout(resetSubmitState, 2000);
