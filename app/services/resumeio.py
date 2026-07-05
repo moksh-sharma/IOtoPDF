@@ -13,6 +13,12 @@ from PIL import Image
 
 from app.schemas.resumeio import Extension
 
+USER_AGENT = (
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/136.0.0.0 Safari/537.36"
+)
+
 
 @dataclass
 class ResumeioDownloader:
@@ -50,9 +56,7 @@ class ResumeioDownloader:
             PDF representation of the resume.
         """
         image = self.__download_image()
-        page_pdf = pytesseract.image_to_pdf_or_hocr(
-            Image.open(image), extension="pdf", config="--dpi 300")
-        return page_pdf
+        return pytesseract.image_to_pdf_or_hocr(Image.open(image), extension="pdf", config="--dpi 300")
 
     def __download_image(self) -> io.BytesIO:
         """Download the first page image of the resume.
@@ -91,11 +95,8 @@ class ResumeioDownloader:
         """
         response = requests.get(
             url,
-            headers={
-                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/136.0.0.0 Safari/537.36",
-            },
+            headers={"User-Agent": USER_AGENT},
+            timeout=60,
         )
         if response.status_code != 200:
             raise HTTPException(

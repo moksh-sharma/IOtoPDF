@@ -29,7 +29,7 @@ def download_resume(
     rendering_token : str
         Rendering Token of the resume to download.
     image_size : int, optional
-        Size of the images to download, by default 3000.
+        Size of the images to download, by default 2000.
     extension : Extension, optional
         Image extension to download, by default "jpeg".
 
@@ -39,9 +39,13 @@ def download_resume(
         A PDF representation of the resume with appropriate headers for inline display.
     """
     resumeio = ResumeioDownloader(
-        rendering_token=rendering_token, image_size=image_size, extension=extension)
+        rendering_token=rendering_token,
+        image_size=image_size,
+        extension=extension,
+    )
     return Response(
         resumeio.generate_pdf(),
+        media_type="application/pdf",
         headers={"Content-Disposition": f'inline; filename="{rendering_token}.pdf"'},
     )
 

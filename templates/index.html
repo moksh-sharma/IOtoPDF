@@ -7,7 +7,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#09090e">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+        rel="stylesheet">
     <meta name="author" content="Shakkar Daddy">
     <meta name="description" content="Convert your Resume.io resume to a searchable PDF - by Shakkar Daddy.">
     <meta property="og:title" content="Shakkar Daddy · Resume.io to PDF">
@@ -15,7 +17,7 @@
     <meta property="og:image" content="/static/logo.png">
     <link rel="icon" type="image/png" href="/static/favicon.png">
     <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
-    <title>Shakkar Daddy · Resume.io to PDF</title>
+    <title>Resume.io to PDF</title>
 
     <style>
         :root {
@@ -140,9 +142,9 @@
         }
 
         .brand-tag {
-            font-size: 0.75rem;
-            color: var(--text-tertiary);
-            font-weight: 400;
+            font-size: 0.875rem;
+            color: var(--text);
+            font-weight: 500;
         }
 
         /* ── Main layout ── */
@@ -153,132 +155,170 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 3rem 2rem 2rem;
+            padding: 2.5rem 1.5rem;
         }
 
         .layout {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(0, 400px);
-            gap: 4rem;
-            align-items: center;
             width: 100%;
-            max-width: var(--max-width);
+            max-width: 520px;
+        }
+
+        .workspace {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow:
+                0 0 0 1px rgba(255, 255, 255, 0.03) inset,
+                0 32px 64px -24px rgba(0, 0, 0, 0.55);
+        }
+
+        .workspace-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 2rem 0;
+            text-align: center;
+        }
+
+        .workspace-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            margin-bottom: 1rem;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+            flex-shrink: 0;
+        }
+
+        .workspace-logo img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .workspace-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 999px;
+            background: var(--accent-muted);
+            border: 1px solid rgba(109, 92, 231, 0.2);
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--accent-light);
+        }
+
+        .workspace-badge svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        .title {
+            font-family: "Plus Jakarta Sans", sans-serif;
+            font-size: clamp(1.625rem, 4vw, 2rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+            color: var(--text);
+            margin-bottom: 0;
+        }
+
+        .title-highlight {
+            background: linear-gradient(135deg, var(--accent-light), #c4b5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            max-width: 22rem;
+            margin: 0 auto;
+        }
+
+        .workspace-body {
+            padding: 1.75rem 2rem 2rem;
+        }
+
+        .workspace-divider {
+            height: 1px;
+            margin: 0 2rem;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+        }
+
+        .workspace-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .feature-chip {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 1rem 0.75rem;
+            text-align: center;
+            border-right: 1px solid var(--border-subtle);
+        }
+
+        .feature-chip:last-child {
+            border-right: none;
+        }
+
+        .feature-chip svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--accent-light);
+        }
+
+        .feature-chip strong {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: -0.01em;
+        }
+
+        .feature-chip span {
+            font-size: 0.625rem;
+            color: var(--text-tertiary);
+            line-height: 1.35;
         }
 
         .br-mobile {
             display: none;
         }
 
-        /* ── Hero (left) ── */
-        .hero {
-            display: flex;
-            flex-direction: column;
-            gap: 1.75rem;
-        }
-
-        .hero-logo {
-            margin-bottom: 0.25rem;
-        }
-
-        .eyebrow {
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--accent-light);
-        }
-
-        .title {
-            font-size: clamp(2rem, 4vw, 2.75rem);
-            font-weight: 700;
-            letter-spacing: -0.035em;
-            line-height: 1.15;
-            color: var(--text);
-        }
-
-        .subtitle {
-            font-size: 1.0625rem;
-            color: var(--text-secondary);
-            line-height: 1.65;
-            max-width: 28rem;
-        }
-
-        .feature-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.875rem;
-            padding-top: 0.5rem;
-        }
-
-        .feature-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-        }
-
-        .feature-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            background: var(--surface-elevated);
-            border: 1px solid var(--border);
-            flex-shrink: 0;
-            margin-top: 1px;
-        }
-
-        .feature-icon svg {
-            width: 15px;
-            height: 15px;
-            stroke: var(--text-secondary);
-        }
-
-        .feature-text strong {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 0.125rem;
-        }
-
-        .feature-text span {
-            font-size: 0.8125rem;
-            color: var(--text-secondary);
-            line-height: 1.45;
-        }
-
-        /* ── Form panel (right) ── */
-        .panel {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 2rem;
-            box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.4);
-        }
-
+        /* ── Form ── */
         .panel-header {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.875rem;
-            margin-bottom: 1.75rem;
-        }
-
-        .panel-header-text {
-            flex: 1;
+            margin-bottom: 1.25rem;
         }
 
         .panel-title {
-            font-size: 1.0625rem;
+            font-size: 0.8125rem;
             font-weight: 600;
-            letter-spacing: -0.02em;
-            margin-bottom: 0.375rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
         }
 
         .panel-desc {
             font-size: 0.8125rem;
-            color: var(--text-secondary);
+            color: var(--text-tertiary);
         }
 
         .resume_form {
@@ -372,7 +412,7 @@
             align-items: center;
             gap: 0.5rem;
             width: 100%;
-            height: 44px;
+            height: 46px;
             margin-top: 0.25rem;
             border-radius: var(--radius-md);
             border: none;
@@ -381,12 +421,14 @@
             font-family: "Inter", sans-serif;
             color: #fff;
             cursor: pointer;
-            background: var(--accent);
-            transition: background 0.15s, transform 0.1s;
+            background: linear-gradient(135deg, var(--accent) 0%, #7c6df0 100%);
+            box-shadow: 0 4px 16px rgba(109, 92, 231, 0.3);
+            transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
         }
 
         .btn:hover {
-            background: var(--accent-light);
+            box-shadow: 0 6px 24px rgba(109, 92, 231, 0.4);
+            transform: translateY(-1px);
         }
 
         .btn:active {
@@ -409,9 +451,11 @@
         }
 
         .hint {
-            margin-top: 1.25rem;
-            padding-top: 1.25rem;
-            border-top: 1px solid var(--border-subtle);
+            margin-top: 1rem;
+            padding: 0.75rem 0.875rem;
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
             font-size: 0.75rem;
             color: var(--text-tertiary);
             line-height: 1.55;
@@ -510,49 +554,6 @@
 
         /* ── Responsive ── */
 
-        /* Tablet */
-        @media (max-width: 960px) {
-            .layout {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-                max-width: 520px;
-            }
-
-            .container {
-                padding: 2rem 1.5rem 1.5rem;
-                align-items: flex-start;
-            }
-
-            .hero {
-                text-align: center;
-                align-items: center;
-                gap: 1.25rem;
-            }
-
-            .hero-logo {
-                display: none;
-            }
-
-            .subtitle {
-                max-width: none;
-                font-size: 1rem;
-            }
-
-            .feature-list {
-                width: 100%;
-                max-width: 100%;
-            }
-
-            .feature-item {
-                text-align: left;
-            }
-
-            .panel {
-                width: 100%;
-            }
-        }
-
-        /* Mobile */
         @media (max-width: 640px) {
             .topbar {
                 padding: 0.875rem 1rem;
@@ -565,38 +566,45 @@
                 border-radius: 8px;
             }
 
-            .brand-name {
+            .brand-tag {
                 font-size: 0.8125rem;
             }
 
-            .brand-tag {
-                font-size: 0.6875rem;
-            }
-
             .container {
-                padding: 1.25rem 1rem 1rem;
+                padding: 1.25rem 1rem;
                 padding-left: max(1rem, env(safe-area-inset-left));
                 padding-right: max(1rem, env(safe-area-inset-right));
+                align-items: flex-start;
             }
 
             .layout {
-                gap: 1.5rem;
                 max-width: 100%;
             }
 
-            /* Form first on mobile - primary action above the fold */
-            .panel {
-                order: -1;
-                padding: 1.25rem;
-                border-radius: 14px;
+            .workspace {
+                border-radius: 16px;
             }
 
-            .hero {
-                gap: 1rem;
+            .workspace-logo {
+                width: 48px;
+                height: 48px;
+                margin-bottom: 0.875rem;
+            }
+
+            .workspace-header {
+                padding: 1.5rem 1.25rem 0;
+            }
+
+            .workspace-body {
+                padding: 1.25rem;
+            }
+
+            .workspace-divider {
+                margin: 0 1.25rem;
             }
 
             .title {
-                font-size: 1.75rem;
+                font-size: 1.5rem;
             }
 
             .br-mobile {
@@ -604,49 +612,32 @@
             }
 
             .subtitle {
-                font-size: 0.9375rem;
-                line-height: 1.55;
+                font-size: 0.875rem;
             }
 
-            .feature-list {
-                gap: 0.75rem;
-                padding-top: 0.25rem;
+            .workspace-features {
+                grid-template-columns: 1fr;
             }
 
-            .feature-icon {
-                width: 28px;
-                height: 28px;
+            .feature-chip {
+                flex-direction: row;
+                justify-content: flex-start;
+                text-align: left;
+                padding: 0.75rem 1.25rem;
+                border-right: none;
+                border-bottom: 1px solid var(--border-subtle);
             }
 
-            .feature-text strong {
-                font-size: 0.8125rem;
+            .feature-chip:last-child {
+                border-bottom: none;
             }
 
-            .feature-text span {
-                font-size: 0.75rem;
-            }
-
-            .panel-header {
-                margin-bottom: 1.25rem;
-                gap: 0.75rem;
-            }
-
-            .panel-header .logo-md {
-                width: 32px;
-                height: 32px;
-            }
-
-            .panel-title {
-                font-size: 1rem;
-            }
-
-            .panel-desc {
-                font-size: 0.75rem;
+            .feature-chip span {
+                font-size: 0.6875rem;
             }
 
             .resume {
                 font-size: 16px;
-                /* prevents iOS zoom on focus */
                 padding: 0.875rem;
                 letter-spacing: 0.02em;
             }
@@ -659,8 +650,6 @@
 
             .hint {
                 font-size: 0.6875rem;
-                margin-top: 1rem;
-                padding-top: 1rem;
                 word-break: break-word;
             }
 
@@ -671,7 +660,6 @@
             }
         }
 
-        /* Small phones */
         @media (max-width: 380px) {
             .brand-text {
                 min-width: 0;
@@ -684,12 +672,10 @@
                 max-width: 140px;
             }
 
-            .title {
-                font-size: 1.5rem;
-            }
-
-            .panel {
-                padding: 1rem;
+            .workspace-header,
+            .workspace-body {
+                padding-left: 1rem;
+                padding-right: 1rem;
             }
 
             .field-row {
@@ -697,150 +683,108 @@
                 gap: 0.25rem;
             }
         }
-
-        /* Landscape phones */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .container {
-                padding-top: 1rem;
-                padding-bottom: 1rem;
-            }
-
-            .hero-logo {
-                display: none;
-            }
-
-            .feature-list {
-                display: none;
-            }
-
-            .layout {
-                gap: 1rem;
-            }
-        }
     </style>
 </head>
 
 <body>
-    <header class="topbar">
-        <div class="brand">
-            <div class="brand-icon">
-                <img class="logo logo-sm" src="/static/logo.png" alt="Shakkar Daddy logo" width="36" height="36">
-            </div>
-            <div class="brand-text">
-                <div class="brand-name">Shakkar Daddy</div>
-                <div class="brand-tag">Resume.io to PDF</div>
-            </div>
-        </div>
-    </header>
-
     <main class="container">
         <div class="layout">
-            <section class="hero">
-                <img class="logo logo-lg hero-logo" src="/static/logo.png" alt="Shakkar Daddy logo" width="56"
-                    height="56">
-                <p class="eyebrow">PDF Converter</p>
-                <h1 class="title">Turn your Resume.io<span class="br-mobile"><br></span> resume into PDF</h1>
-                <p class="subtitle">
-                    Enter your rendering token to download a clean, searchable PDF - with OCR text extraction built in.
-                </p>
-
-                <div class="feature-list">
-                    <div class="feature-item">
-                        <div class="feature-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
-                                <polyline points="13 2 13 9 20 9" />
-                            </svg>
-                        </div>
-                        <div class="feature-text">
-                            <strong>High-quality PDF export</strong>
-                            <span>Downloads your resume page as a crisp PDF file.</span>
-                        </div>
+            <div class="workspace">
+                <div class="workspace-header">
+                    <div class="workspace-logo">
+                        <img src="/static/logo.png" alt="IOtoPDF logo" width="56" height="56">
                     </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8" />
-                                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                            </svg>
-                        </div>
-                        <div class="feature-text">
-                            <strong>OCR text layer</strong>
-                            <span>Extracts searchable text so your PDF is ATS-friendly.</span>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-                            </svg>
-                        </div>
-                        <div class="feature-text">
-                            <strong>Instant download</strong>
-                            <span>No sign-up required - paste your token and go.</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="panel">
-                <div class="panel-header">
-                    <img class="logo logo-md" src="/static/logo.png" alt="" aria-hidden="true" width="40" height="40">
-                    <div class="panel-header-text">
-                        <h2 class="panel-title">Download your resume</h2>
-                        <p class="panel-desc">Paste the 24-character rendering token from your Resume.io account.</p>
-                    </div>
-                </div>
-
-                <form method="post" class="resume_form" id="downloadForm">
-                    <div class="field-group">
-                        <div class="field-row">
-                            <label class="field-label" for="rendering_token">Rendering Token</label>
-                            <span class="char-count" id="charCount">0 / 24</span>
-                        </div>
-                        <input type="text" class="resume" id="rendering_token" name="rendering_token"
-                            placeholder="Paste 24-char token" aria-label="Rendering token" maxlength="24"
-                            inputmode="text" autocapitalize="off" autocorrect="off" autocomplete="off"
-                            spellcheck="false">
-                    </div>
-
-                    <span class="error" id="errorMessage">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10" />
-                            <line x1="12" y1="8" x2="12" y2="12" />
-                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                    <div class="workspace-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
+                            <polyline points="13 2 13 9 20 9" />
                         </svg>
-                        Token must be exactly 24 alphanumeric characters.
-                    </span>
+                        Free converter
+                    </div>
+                    <h1 class="title">
+                        <span class="title-highlight">Resume.io</span> to<br class="br-mobile"> PDF
+                    </h1>
+                </div>
 
-                    <button id="submit-btn" class="btn" type="submit">
-                        <span id="submit-text">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                <div class="workspace-divider"></div>
+
+                <div class="workspace-body">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Get started</h2>
+                        <p class="panel-desc">Enter your 24-character token from Resume.io</p>
+                    </div>
+
+                    <form method="post" class="resume_form" id="downloadForm" target="_blank">
+                        <div class="field-group">
+                            <div class="field-row">
+                                <label class="field-label" for="rendering_token">Rendering Token</label>
+                                <span class="char-count" id="charCount">0 / 24</span>
+                            </div>
+                            <input type="text" class="resume" id="rendering_token" name="rendering_token"
+                                placeholder="Paste 24-char token" aria-label="Rendering token" maxlength="24"
+                                inputmode="text" autocapitalize="off" autocorrect="off" autocomplete="off"
+                                spellcheck="false">
+                        </div>
+
+                        <span class="error" id="errorMessage">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                <polyline points="7 10 12 15 17 10" />
-                                <line x1="12" y1="15" x2="12" y2="3" />
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="8" x2="12" y2="12" />
+                                <line x1="12" y1="16" x2="12.01" y2="16" />
                             </svg>
-                            Download PDF
+                            <span id="errorText">Token must be exactly 24 alphanumeric characters.</span>
                         </span>
-                        <svg id="loader" width="20" height="20" stroke="#fff" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <g class="spinner_V8m1">
-                                <circle cx="12" cy="12" r="9.5" fill="none" stroke-width="3"></circle>
-                            </g>
-                        </svg>
-                    </button>
-                </form>
 
-                <p class="hint">
-                    Find your token at resume.io → DevTools → Network → look for <code>renderingToken</code> in the API
-                    response.
-                </p>
-            </section>
+                        <button id="submit-btn" class="btn" type="submit">
+                            <span id="submit-text">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <polyline points="7 10 12 15 17 10" />
+                                    <line x1="12" y1="15" x2="12" y2="3" />
+                                </svg>
+                                Download
+                            </span>
+                            <svg id="loader" width="20" height="20" stroke="#fff" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g class="spinner_V8m1">
+                                    <circle cx="12" cy="12" r="9.5" fill="none" stroke-width="3"></circle>
+                                </g>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="workspace-features">
+                    <div class="feature-chip">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
+                            <polyline points="13 2 13 9 20 9" />
+                        </svg>
+                        <strong>PDF export</strong>
+                        <span>Full layout</span>
+                    </div>
+                    <div class="feature-chip">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        </svg>
+                        <strong>OCR text</strong>
+                        <span>Searchable PDF</span>
+                    </div>
+                    <div class="feature-chip">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                        </svg>
+                        <strong>Instant</strong>
+                        <span>No sign-up</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -850,16 +794,24 @@
     </footer>
 
     <script>
-        window.addEventListener('pageshow', function () {
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('submit-text').style.display = 'flex';
-        });
-
         const downloadForm = document.getElementById("downloadForm");
         const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
         const inputField = document.getElementById('rendering_token');
         const charCount = document.getElementById('charCount');
         const submitText = document.getElementById('submit-text');
+        const submitBtn = document.getElementById('submit-btn');
+        const loader = document.getElementById('loader');
+
+        function resetSubmitState() {
+            submitText.style.display = 'flex';
+            loader.style.display = 'none';
+            submitBtn.disabled = false;
+        }
+
+        window.addEventListener('pageshow', function () {
+            resetSubmitState();
+        });
 
         inputField.addEventListener('input', function () {
             const len = this.value.length;
@@ -873,10 +825,12 @@
 
         downloadForm.addEventListener("submit", function (e) {
             e.preventDefault();
-            const rendering_token = new FormData(downloadForm).get('rendering_token').toString();
+            const formData = new FormData(downloadForm);
+            const rendering_token = formData.get('rendering_token').toString();
             const regex = /^[a-zA-Z0-9]{24}$/;
 
             if (!regex.test(rendering_token)) {
+                errorText.textContent = 'Token must be exactly 24 alphanumeric characters.';
                 errorMessage.style.display = 'flex';
                 inputField.classList.add('error-border');
                 inputField.classList.remove('shake');
@@ -890,9 +844,14 @@
             inputField.classList.remove('error-border', 'shake');
 
             downloadForm.action = '/download/' + rendering_token;
+            downloadForm.target = '_blank';
             submitText.style.display = 'none';
-            document.getElementById('loader').style.display = 'block';
+            loader.style.display = 'block';
+            submitBtn.disabled = true;
+
             this.submit();
+
+            setTimeout(resetSubmitState, 2000);
         });
     </script>
 </body>
